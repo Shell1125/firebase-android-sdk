@@ -68,7 +68,11 @@ fun randomDate(): Date =
 /** Generates and returns a random [Timestamp] object. */
 fun randomTimestamp(): Timestamp {
   val nanoseconds = Random.nextInt(1_000_000_000)
-  val seconds = Random.nextLong(EdgeCases.Timestamps.MIN.seconds, EdgeCases.Timestamps.MAX.seconds)
+  val seconds =
+    Random.nextLong(
+      EdgeCases.Timestamps.MIN.timestamp.seconds,
+      EdgeCases.Timestamps.MAX.timestamp.seconds
+    )
   return Timestamp(seconds, nanoseconds)
 }
 

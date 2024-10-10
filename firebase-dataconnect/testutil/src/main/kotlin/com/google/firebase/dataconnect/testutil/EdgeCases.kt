@@ -135,15 +135,37 @@ object EdgeCases {
     )
 
   object Timestamps {
-    // "1583-01-01T00:00:00.000000Z"
-    val MIN
-      get() = Timestamp(-12_212_553_600, 0)
+    data class TestCase(
+      val timestamp: Timestamp,
+      val fullString: String,
+      val fdcRoundTripString: String
+    )
 
-    // "9999-12-31T23:59:59.999999999Z"
-    val MAX
-      get() = Timestamp(253_402_300_799, 999_999_999)
+    val MIN: TestCase
+      get() =
+        TestCase(
+          Timestamp(-12_212_553_600, 0),
+          fullString = "1583-01-01T00:00:00.000000000Z",
+          fdcRoundTripString = "1583-01-01T00:00:00.000000Z",
+        )
 
-    val ZERO: Timestamp
-      get() = Timestamp(0, 0)
+    val MAX: TestCase
+      get() =
+        TestCase(
+          Timestamp(253_402_300_799, 999_999_999),
+          fullString = "9999-12-31T23:59:59.999999999Z",
+          fdcRoundTripString = "9999-12-31T23:59:59.999999Z",
+        )
+
+    val ZERO: TestCase
+      get() =
+        TestCase(
+          Timestamp(0, 0),
+          fullString = "1970-01-01T00:00:00.000000000Z",
+          fdcRoundTripString = "1970-01-01T00:00:00.000000Z",
+        )
   }
+
+  val timestamps: List<Timestamps.TestCase> =
+    listOf(Timestamps.MIN, Timestamps.MAX, Timestamps.ZERO)
 }

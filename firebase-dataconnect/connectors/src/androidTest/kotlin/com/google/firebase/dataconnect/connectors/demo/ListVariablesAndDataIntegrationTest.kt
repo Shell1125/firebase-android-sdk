@@ -147,7 +147,8 @@ class ListVariablesAndDataIntegrationTest : DemoConnectorIntegrationTestBase() {
               Long.MIN_VALUE
             ),
           dates = listOf(MIN_DATE, MAX_DATE),
-          timestamps = listOf(EdgeCases.Timestamps.MIN, EdgeCases.Timestamps.MAX),
+          timestamps =
+            listOf(EdgeCases.Timestamps.MIN.timestamp, EdgeCases.Timestamps.MAX.timestamp),
         )
         .data
         .key
@@ -177,8 +178,8 @@ class ListVariablesAndDataIntegrationTest : DemoConnectorIntegrationTestBase() {
             dates = listOf(MIN_DATE, MAX_DATE),
             timestamps =
               listOf(
-                EdgeCases.Timestamps.MIN.withMicrosecondPrecision(),
-                EdgeCases.Timestamps.MAX.withMicrosecondPrecision()
+                EdgeCases.Timestamps.MIN.timestamp.withMicrosecondPrecision(),
+                EdgeCases.Timestamps.MAX.timestamp.withMicrosecondPrecision()
               ),
           )
         )
@@ -465,7 +466,8 @@ class ListVariablesAndDataIntegrationTest : DemoConnectorIntegrationTestBase() {
               Long.MIN_VALUE
             )
           dates = listOf(MIN_DATE, MAX_DATE)
-          timestamps = listOf(EdgeCases.Timestamps.MIN, EdgeCases.Timestamps.MAX)
+          timestamps =
+            listOf(EdgeCases.Timestamps.MIN.timestamp, EdgeCases.Timestamps.MAX.timestamp)
         }
         .data
         .key
@@ -495,8 +497,8 @@ class ListVariablesAndDataIntegrationTest : DemoConnectorIntegrationTestBase() {
             dates = listOf(MIN_DATE, MAX_DATE),
             timestamps =
               listOf(
-                EdgeCases.Timestamps.MIN.withMicrosecondPrecision(),
-                EdgeCases.Timestamps.MAX.withMicrosecondPrecision()
+                EdgeCases.Timestamps.MIN.timestamp.withMicrosecondPrecision(),
+                EdgeCases.Timestamps.MAX.timestamp.withMicrosecondPrecision()
               ),
           )
         )
