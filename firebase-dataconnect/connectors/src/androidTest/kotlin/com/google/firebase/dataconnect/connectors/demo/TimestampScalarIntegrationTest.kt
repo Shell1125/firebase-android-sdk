@@ -16,7 +16,6 @@
 
 package com.google.firebase.dataconnect.connectors.demo
 
-import com.google.common.truth.Truth.assertThat
 import com.google.firebase.Timestamp
 import com.google.firebase.dataconnect.DataConnectException
 import com.google.firebase.dataconnect.connectors.demo.testutil.DemoConnectorIntegrationTestBase
@@ -30,6 +29,7 @@ import com.google.firebase.dataconnect.testutil.withDataDeserializer
 import com.google.firebase.dataconnect.testutil.withMicrosecondPrecision
 import com.google.firebase.dataconnect.testutil.withVariablesSerializer
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.matchers.shouldBe
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.Serializable
@@ -202,20 +202,17 @@ class TimestampScalarIntegrationTest : DemoConnectorIntegrationTestBase() {
     // value is used for both fields to which it is set.
     val expectedRequestTime = queryResult.data.nonNullTimestampsWithDefaults!!.requestTime1
 
-    assertThat(
-      queryResult.equals(
-        GetNonNullTimestampsWithDefaultsByKeyQuery.Data(
-          GetNonNullTimestampsWithDefaultsByKeyQuery.Data.NonNullTimestampsWithDefaults(
-            valueWithVariableDefault =
-              timestampFromUTCDateAndTime(3575, 4, 12, 10, 11, 12, 541991000),
-            valueWithSchemaDefault = timestampFromUTCDateAndTime(6224, 1, 31, 14, 2, 45, 714214000),
-            epoch = EdgeCases.Timestamps.ZERO,
-            requestTime1 = expectedRequestTime,
-            requestTime2 = expectedRequestTime,
-          )
+    queryResult.data shouldBe
+      GetNonNullTimestampsWithDefaultsByKeyQuery.Data(
+        GetNonNullTimestampsWithDefaultsByKeyQuery.Data.NonNullTimestampsWithDefaults(
+          valueWithVariableDefault =
+            timestampFromUTCDateAndTime(3575, 4, 12, 10, 11, 12, 541991000),
+          valueWithSchemaDefault = timestampFromUTCDateAndTime(6224, 1, 31, 14, 2, 45, 714214000),
+          epoch = EdgeCases.Timestamps.ZERO,
+          requestTime1 = expectedRequestTime,
+          requestTime2 = expectedRequestTime,
         )
       )
-    )
   }
 
   @Test
@@ -502,20 +499,17 @@ class TimestampScalarIntegrationTest : DemoConnectorIntegrationTestBase() {
     // value is used for both fields to which it is set.
     val expectedRequestTime = queryResult.data.nullableTimestampsWithDefaults!!.requestTime1
 
-    assertThat(
-      queryResult.equals(
-        GetNullableTimestampsWithDefaultsByKeyQuery.Data(
-          GetNullableTimestampsWithDefaultsByKeyQuery.Data.NullableTimestampsWithDefaults(
-            valueWithVariableDefault =
-              timestampFromUTCDateAndTime(2554, 12, 20, 13, 3, 45, 110429000),
-            valueWithSchemaDefault = timestampFromUTCDateAndTime(1621, 12, 3, 1, 22, 3, 513914000),
-            epoch = EdgeCases.Timestamps.ZERO,
-            requestTime1 = expectedRequestTime,
-            requestTime2 = expectedRequestTime,
-          )
+    queryResult.data shouldBe
+      GetNullableTimestampsWithDefaultsByKeyQuery.Data(
+        GetNullableTimestampsWithDefaultsByKeyQuery.Data.NullableTimestampsWithDefaults(
+          valueWithVariableDefault =
+            timestampFromUTCDateAndTime(2554, 12, 20, 13, 3, 45, 110429000),
+          valueWithSchemaDefault = timestampFromUTCDateAndTime(1621, 12, 3, 1, 22, 3, 513914000),
+          epoch = EdgeCases.Timestamps.ZERO,
+          requestTime1 = expectedRequestTime,
+          requestTime2 = expectedRequestTime,
         )
       )
-    )
   }
 
   @Test
@@ -575,7 +569,7 @@ class TimestampScalarIntegrationTest : DemoConnectorIntegrationTestBase() {
       connector.getNonNullTimestampByKey
         .withDataDeserializer(serializer<GetTimestampByKeyQueryStringData>())
         .execute(key)
-    assertThat(queryResult.data).isEqualTo(GetTimestampByKeyQueryStringData(expected))
+    queryResult.data.value?.value shouldBe expected
   }
 
   private suspend fun assertNonNullTimestampByKeyEquals(
@@ -583,10 +577,7 @@ class TimestampScalarIntegrationTest : DemoConnectorIntegrationTestBase() {
     expected: Timestamp
   ) {
     val queryResult = connector.getNonNullTimestampByKey.execute(key)
-    assertThat(queryResult.data)
-      .isEqualTo(
-        GetNonNullTimestampByKeyQuery.Data(GetNonNullTimestampByKeyQuery.Data.Value(expected))
-      )
+    queryResult.data.value?.value shouldBe expected
   }
 
   private suspend fun assertNullableTimestampByKeyEquals(
@@ -597,7 +588,7 @@ class TimestampScalarIntegrationTest : DemoConnectorIntegrationTestBase() {
       connector.getNullableTimestampByKey
         .withDataDeserializer(serializer<GetTimestampByKeyQueryStringData>())
         .execute(key)
-    assertThat(queryResult.data).isEqualTo(GetTimestampByKeyQueryStringData(expected))
+    queryResult.data.value?.value shouldBe expected
   }
 
   private suspend fun assertNullableTimestampByKeyEquals(
@@ -605,10 +596,7 @@ class TimestampScalarIntegrationTest : DemoConnectorIntegrationTestBase() {
     expected: Timestamp?
   ) {
     val queryResult = connector.getNullableTimestampByKey.execute(key)
-    assertThat(queryResult.data)
-      .isEqualTo(
-        GetNullableTimestampByKeyQuery.Data(GetNullableTimestampByKeyQuery.Data.Value(expected))
-      )
+    queryResult.data.value?.value shouldBe expected
   }
 
   /**
@@ -618,7 +606,6 @@ class TimestampScalarIntegrationTest : DemoConnectorIntegrationTestBase() {
    */
   @Serializable
   private data class GetTimestampByKeyQueryStringData(val value: TimestampStringValue?) {
-    constructor(value: String) : this(TimestampStringValue(value))
     @Serializable data class TimestampStringValue(val value: String)
   }
 
