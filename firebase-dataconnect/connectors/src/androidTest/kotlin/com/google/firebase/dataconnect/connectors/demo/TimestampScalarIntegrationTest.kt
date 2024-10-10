@@ -22,9 +22,7 @@ import com.google.firebase.dataconnect.DataConnectException
 import com.google.firebase.dataconnect.connectors.demo.testutil.DemoConnectorIntegrationTestBase
 import com.google.firebase.dataconnect.generated.GeneratedMutation
 import com.google.firebase.dataconnect.generated.GeneratedQuery
-import com.google.firebase.dataconnect.testutil.MAX_TIMESTAMP
-import com.google.firebase.dataconnect.testutil.MIN_TIMESTAMP
-import com.google.firebase.dataconnect.testutil.ZERO_TIMESTAMP
+import com.google.firebase.dataconnect.testutil.EdgeCases
 import com.google.firebase.dataconnect.testutil.executeWithEmptyVariables
 import com.google.firebase.dataconnect.testutil.randomTimestamp
 import com.google.firebase.dataconnect.testutil.timestampFromUTCDateAndTime
@@ -50,13 +48,13 @@ class TimestampScalarIntegrationTest : DemoConnectorIntegrationTestBase() {
 
   @Test
   fun insertMaxValueForNonNullTimestampField() = runTest {
-    val key = connector.insertNonNullTimestamp.execute(MIN_TIMESTAMP).data.key
+    val key = connector.insertNonNullTimestamp.execute(EdgeCases.Timestamps.MIN).data.key
     assertNonNullTimestampByKeyEquals(key, "1583-01-01T00:00:00.000000Z")
   }
 
   @Test
   fun insertMinValueForNonNullTimestampField() = runTest {
-    val key = connector.insertNonNullTimestamp.execute(MAX_TIMESTAMP).data.key
+    val key = connector.insertNonNullTimestamp.execute(EdgeCases.Timestamps.MAX).data.key
     assertNonNullTimestampByKeyEquals(key, "9999-12-31T23:59:59.999999Z")
   }
 
@@ -211,7 +209,7 @@ class TimestampScalarIntegrationTest : DemoConnectorIntegrationTestBase() {
             valueWithVariableDefault =
               timestampFromUTCDateAndTime(3575, 4, 12, 10, 11, 12, 541991000),
             valueWithSchemaDefault = timestampFromUTCDateAndTime(6224, 1, 31, 14, 2, 45, 714214000),
-            epoch = ZERO_TIMESTAMP,
+            epoch = EdgeCases.Timestamps.ZERO,
             requestTime1 = expectedRequestTime,
             requestTime2 = expectedRequestTime,
           )
@@ -277,7 +275,7 @@ class TimestampScalarIntegrationTest : DemoConnectorIntegrationTestBase() {
   fun updateNonNullTimestampFieldToMinValue() = runTest {
     val timestamp = randomTimestamp()
     val key = connector.insertNonNullTimestamp.execute(timestamp).data.key
-    connector.updateNonNullTimestamp.execute(key) { value = MIN_TIMESTAMP }
+    connector.updateNonNullTimestamp.execute(key) { value = EdgeCases.Timestamps.MIN }
     assertNonNullTimestampByKeyEquals(key, "1583-01-01T00:00:00.000000Z")
   }
 
@@ -285,7 +283,7 @@ class TimestampScalarIntegrationTest : DemoConnectorIntegrationTestBase() {
   fun updateNonNullTimestampFieldToMaxValue() = runTest {
     val timestamp = randomTimestamp()
     val key = connector.insertNonNullTimestamp.execute(timestamp).data.key
-    connector.updateNonNullTimestamp.execute(key) { value = MAX_TIMESTAMP }
+    connector.updateNonNullTimestamp.execute(key) { value = EdgeCases.Timestamps.MAX }
     assertNonNullTimestampByKeyEquals(key, "9999-12-31T23:59:59.999999Z")
   }
 
@@ -306,13 +304,15 @@ class TimestampScalarIntegrationTest : DemoConnectorIntegrationTestBase() {
 
   @Test
   fun insertMaxValueForNullableTimestampField() = runTest {
-    val key = connector.insertNullableTimestamp.execute { value = MIN_TIMESTAMP }.data.key
+    val key =
+      connector.insertNullableTimestamp.execute { value = EdgeCases.Timestamps.MIN }.data.key
     assertNullableTimestampByKeyEquals(key, "1583-01-01T00:00:00.000000Z")
   }
 
   @Test
   fun insertMinValueForNullableTimestampField() = runTest {
-    val key = connector.insertNullableTimestamp.execute { value = MAX_TIMESTAMP }.data.key
+    val key =
+      connector.insertNullableTimestamp.execute { value = EdgeCases.Timestamps.MAX }.data.key
     assertNullableTimestampByKeyEquals(key, "9999-12-31T23:59:59.999999Z")
   }
 
@@ -509,7 +509,7 @@ class TimestampScalarIntegrationTest : DemoConnectorIntegrationTestBase() {
             valueWithVariableDefault =
               timestampFromUTCDateAndTime(2554, 12, 20, 13, 3, 45, 110429000),
             valueWithSchemaDefault = timestampFromUTCDateAndTime(1621, 12, 3, 1, 22, 3, 513914000),
-            epoch = ZERO_TIMESTAMP,
+            epoch = EdgeCases.Timestamps.ZERO,
             requestTime1 = expectedRequestTime,
             requestTime2 = expectedRequestTime,
           )
@@ -531,7 +531,7 @@ class TimestampScalarIntegrationTest : DemoConnectorIntegrationTestBase() {
   fun updateNullableTimestampFieldToMinValue() = runTest {
     val timestamp = randomTimestamp()
     val key = connector.insertNullableTimestamp.execute { value = timestamp }.data.key
-    connector.updateNullableTimestamp.execute(key) { value = MIN_TIMESTAMP }
+    connector.updateNullableTimestamp.execute(key) { value = EdgeCases.Timestamps.MIN }
     assertNullableTimestampByKeyEquals(key, "1583-01-01T00:00:00.000000Z")
   }
 
@@ -539,7 +539,7 @@ class TimestampScalarIntegrationTest : DemoConnectorIntegrationTestBase() {
   fun updateNullableTimestampFieldToMaxValue() = runTest {
     val timestamp = randomTimestamp()
     val key = connector.insertNullableTimestamp.execute { value = timestamp }.data.key
-    connector.updateNullableTimestamp.execute(key) { value = MAX_TIMESTAMP }
+    connector.updateNullableTimestamp.execute(key) { value = EdgeCases.Timestamps.MAX }
     assertNullableTimestampByKeyEquals(key, "9999-12-31T23:59:59.999999Z")
   }
 

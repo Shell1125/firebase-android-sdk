@@ -16,6 +16,7 @@
 
 package com.google.firebase.dataconnect.testutil
 
+import com.google.firebase.Timestamp
 import java.util.Date
 import java.util.GregorianCalendar
 import java.util.TimeZone
@@ -132,4 +133,17 @@ object EdgeCases {
       ),
       DateAndString(Date(Dates.ZERO_DATE_AND_STRING.date.time - 1), "1969-12-31"),
     )
+
+  object Timestamps {
+    // "1583-01-01T00:00:00.000000Z"
+    val MIN
+      get() = Timestamp(-12_212_553_600, 0)
+
+    // "9999-12-31T23:59:59.999999999Z"
+    val MAX
+      get() = Timestamp(253_402_300_799, 999_999_999)
+
+    val ZERO: Timestamp
+      get() = Timestamp(0, 0)
+  }
 }

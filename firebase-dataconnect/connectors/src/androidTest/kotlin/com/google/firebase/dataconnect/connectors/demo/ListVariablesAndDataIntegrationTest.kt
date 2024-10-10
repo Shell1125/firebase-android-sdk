@@ -19,11 +19,10 @@ package com.google.firebase.dataconnect.connectors.demo
 import com.google.common.truth.Truth.assertThat
 import com.google.firebase.Timestamp
 import com.google.firebase.dataconnect.connectors.demo.testutil.DemoConnectorIntegrationTestBase
+import com.google.firebase.dataconnect.testutil.EdgeCases
 import com.google.firebase.dataconnect.testutil.MAX_DATE
 import com.google.firebase.dataconnect.testutil.MAX_SAFE_INTEGER
-import com.google.firebase.dataconnect.testutil.MAX_TIMESTAMP
 import com.google.firebase.dataconnect.testutil.MIN_DATE
-import com.google.firebase.dataconnect.testutil.MIN_TIMESTAMP
 import com.google.firebase.dataconnect.testutil.dateFromYearMonthDayUTC
 import com.google.firebase.dataconnect.testutil.withMicrosecondPrecision
 import java.util.UUID
@@ -148,7 +147,7 @@ class ListVariablesAndDataIntegrationTest : DemoConnectorIntegrationTestBase() {
               Long.MIN_VALUE
             ),
           dates = listOf(MIN_DATE, MAX_DATE),
-          timestamps = listOf(MIN_TIMESTAMP, MAX_TIMESTAMP),
+          timestamps = listOf(EdgeCases.Timestamps.MIN, EdgeCases.Timestamps.MAX),
         )
         .data
         .key
@@ -178,8 +177,8 @@ class ListVariablesAndDataIntegrationTest : DemoConnectorIntegrationTestBase() {
             dates = listOf(MIN_DATE, MAX_DATE),
             timestamps =
               listOf(
-                MIN_TIMESTAMP.withMicrosecondPrecision(),
-                MAX_TIMESTAMP.withMicrosecondPrecision()
+                EdgeCases.Timestamps.MIN.withMicrosecondPrecision(),
+                EdgeCases.Timestamps.MAX.withMicrosecondPrecision()
               ),
           )
         )
@@ -466,7 +465,7 @@ class ListVariablesAndDataIntegrationTest : DemoConnectorIntegrationTestBase() {
               Long.MIN_VALUE
             )
           dates = listOf(MIN_DATE, MAX_DATE)
-          timestamps = listOf(MIN_TIMESTAMP, MAX_TIMESTAMP)
+          timestamps = listOf(EdgeCases.Timestamps.MIN, EdgeCases.Timestamps.MAX)
         }
         .data
         .key
@@ -496,8 +495,8 @@ class ListVariablesAndDataIntegrationTest : DemoConnectorIntegrationTestBase() {
             dates = listOf(MIN_DATE, MAX_DATE),
             timestamps =
               listOf(
-                MIN_TIMESTAMP.withMicrosecondPrecision(),
-                MAX_TIMESTAMP.withMicrosecondPrecision()
+                EdgeCases.Timestamps.MIN.withMicrosecondPrecision(),
+                EdgeCases.Timestamps.MAX.withMicrosecondPrecision()
               ),
           )
         )

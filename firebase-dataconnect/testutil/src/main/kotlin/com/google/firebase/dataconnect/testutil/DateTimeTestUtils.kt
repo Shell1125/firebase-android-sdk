@@ -68,7 +68,7 @@ fun randomDate(): Date =
 /** Generates and returns a random [Timestamp] object. */
 fun randomTimestamp(): Timestamp {
   val nanoseconds = Random.nextInt(1_000_000_000)
-  val seconds = Random.nextLong(MIN_TIMESTAMP.seconds, MAX_TIMESTAMP.seconds)
+  val seconds = Random.nextLong(EdgeCases.Timestamps.MIN.seconds, EdgeCases.Timestamps.MAX.seconds)
   return Timestamp(seconds, nanoseconds)
 }
 
@@ -76,17 +76,6 @@ fun Timestamp.withMicrosecondPrecision(): Timestamp {
   val result = Timestamp(seconds, ((nanoseconds.toLong() / 1_000) * 1_000).toInt())
   return result
 }
-
-// "1583-01-01T00:00:00.000000Z"
-val MIN_TIMESTAMP
-  get() = Timestamp(-12_212_553_600, 0)
-
-// "9999-12-31T23:59:59.999999999Z"
-val MAX_TIMESTAMP
-  get() = Timestamp(253_402_300_799, 999_999_999)
-
-val ZERO_TIMESTAMP: Timestamp
-  get() = Timestamp(0, 0)
 
 /**
  * Creates and returns a new [Timestamp] object that represents the given date and time.
