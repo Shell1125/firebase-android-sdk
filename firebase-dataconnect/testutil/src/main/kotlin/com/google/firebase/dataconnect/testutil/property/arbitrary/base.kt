@@ -14,10 +14,16 @@
  * limitations under the License.
  */
 
-package com.google.firebase.dataconnect.testutil
+package com.google.firebase.dataconnect.testutil.property.arbitrary
 
-import com.google.firebase.Timestamp
-import java.util.Date
-import java.util.GregorianCalendar
-import java.util.TimeZone
+import io.kotest.property.Arb
+import io.kotest.property.arbitrary.filter
+import io.kotest.property.arbitrary.map
 
+class EdgeCases private constructor() {
+  companion object
+}
+
+fun <A> Arb<A>.filterNotNull(): Arb<A & Any> = filter { it !== null }.map { it!! }
+
+fun <A> Arb<A>.filterNotEqual(other: A) = filter { it != other }
