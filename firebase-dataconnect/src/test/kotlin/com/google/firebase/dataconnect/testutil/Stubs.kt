@@ -42,28 +42,70 @@ internal class StubOperationRefImpl<Data, Variables>(
     variablesSerializersModule = variablesSerializersModule,
     dataSerializersModule = dataSerializersModule,
   ) {
-  override suspend fun execute(): OperationResultImpl {
-    throw UnsupportedOperationException("this stub method is not supported")
-  }
-}
 
-internal fun <Data, Variables> StubOperationRefImpl<Data, Variables>.copy(
-  dataConnect: FirebaseDataConnectInternal = this.dataConnect,
-  operationName: String = this.operationName,
-  variables: Variables = this.variables,
-  dataDeserializer: DeserializationStrategy<Data> = this.dataDeserializer,
-  variablesSerializer: SerializationStrategy<Variables> = this.variablesSerializer,
-  callerSdkType: FirebaseDataConnect.CallerSdkType = this.callerSdkType,
-  variablesSerializersModule: SerializersModule? = this.variablesSerializersModule,
-  dataSerializersModule: SerializersModule? = this.dataSerializersModule,
-): StubOperationRefImpl<Data, Variables> =
-  StubOperationRefImpl(
-    dataConnect = dataConnect,
-    operationName = operationName,
-    variables = variables,
-    dataDeserializer = dataDeserializer,
-    variablesSerializer = variablesSerializer,
-    callerSdkType = callerSdkType,
-    variablesSerializersModule = variablesSerializersModule,
-    dataSerializersModule = dataSerializersModule,
-  )
+  override fun withDataConnect(
+    dataConnect: FirebaseDataConnectInternal
+  ): StubOperationRefImpl<Data, Variables> =
+    StubOperationRefImpl(
+      dataConnect = dataConnect,
+      operationName = operationName,
+      variables = variables,
+      dataDeserializer = dataDeserializer,
+      variablesSerializer = variablesSerializer,
+      callerSdkType = callerSdkType,
+      variablesSerializersModule = variablesSerializersModule,
+      dataSerializersModule = dataSerializersModule,
+    )
+
+  override suspend fun execute() =
+    throw UnsupportedOperationException("execute() is not implemented in StubOperationRefImpl")
+
+  override fun copy(
+    operationName: String,
+    variables: Variables,
+    dataDeserializer: DeserializationStrategy<Data>,
+    variablesSerializer: SerializationStrategy<Variables>,
+    callerSdkType: FirebaseDataConnect.CallerSdkType,
+    variablesSerializersModule: SerializersModule?,
+    dataSerializersModule: SerializersModule?,
+  ): StubOperationRefImpl<Data, Variables> =
+    StubOperationRefImpl(
+      dataConnect = dataConnect,
+      operationName = operationName,
+      variables = variables,
+      dataDeserializer = dataDeserializer,
+      variablesSerializer = variablesSerializer,
+      callerSdkType = callerSdkType,
+      variablesSerializersModule = variablesSerializersModule,
+      dataSerializersModule = dataSerializersModule,
+    )
+
+  override fun <NewVariables> withVariables(
+    variables: NewVariables,
+    variablesSerializer: SerializationStrategy<NewVariables>,
+  ): StubOperationRefImpl<Data, NewVariables> =
+    StubOperationRefImpl(
+      dataConnect = dataConnect,
+      operationName = operationName,
+      variables = variables,
+      dataDeserializer = dataDeserializer,
+      variablesSerializer = variablesSerializer,
+      callerSdkType = callerSdkType,
+      variablesSerializersModule = variablesSerializersModule,
+      dataSerializersModule = dataSerializersModule,
+    )
+
+  override fun <NewData> withDataDeserializer(
+    dataDeserializer: DeserializationStrategy<NewData>
+  ): StubOperationRefImpl<NewData, Variables> =
+    StubOperationRefImpl(
+      dataConnect = dataConnect,
+      operationName = operationName,
+      variables = variables,
+      dataDeserializer = dataDeserializer,
+      variablesSerializer = variablesSerializer,
+      callerSdkType = callerSdkType,
+      variablesSerializersModule = variablesSerializersModule,
+      dataSerializersModule = dataSerializersModule,
+    )
+}

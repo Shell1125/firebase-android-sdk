@@ -23,9 +23,6 @@ import com.google.firebase.dataconnect.DataConnectUntypedData
 import com.google.firebase.dataconnect.DataConnectUntypedVariables
 import com.google.firebase.dataconnect.FirebaseDataConnect.CallerSdkType
 import com.google.firebase.dataconnect.core.DataConnectGrpcClient.OperationResult
-import com.google.firebase.dataconnect.core.Globals.copy
-import com.google.firebase.dataconnect.core.Globals.withDataDeserializer
-import com.google.firebase.dataconnect.core.Globals.withVariablesSerializer
 import com.google.firebase.dataconnect.testutil.property.arbitrary.DataConnectArb
 import com.google.firebase.dataconnect.testutil.property.arbitrary.dataConnect
 import com.google.firebase.dataconnect.testutil.property.arbitrary.dataConnectError
@@ -41,6 +38,7 @@ import io.kotest.assertions.asClue
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.retry
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.common.ExperimentalKotest
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -74,6 +72,7 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.serializer
 import org.junit.Test
 
+@ExperimentalKotest
 @Suppress("ReplaceCallWithBinaryOperator")
 class MutationRefImplUnitTest {
 
@@ -155,7 +154,7 @@ class MutationRefImplUnitTest {
       Arb.dataConnect
         .mutationRefImpl(dataConnect)
         .next()
-        .withVariablesSerializer(variables, DataConnectUntypedVariables)
+        .withVariables(variables, DataConnectUntypedVariables)
         .withDataDeserializer(DataConnectUntypedData)
 
     val mutationResult = mutationRefImpl.execute()
@@ -254,7 +253,7 @@ class MutationRefImplUnitTest {
   @Test
   fun `hashCode() should incorporate dataConnect`() = runTest {
     verifyHashCodeEventuallyDiffers {
-      it.copy(dataConnect = mockk(name = Arb.dataConnect.string().next()))
+      it.withDataConnect(mockk(name = Arb.dataConnect.string().next()))
     }
   }
 
@@ -366,7 +365,7 @@ class MutationRefImplUnitTest {
       Arb.mock<FirebaseDataConnectInternal>()
     ) { mutationRefImpl1, dataConnect ->
       dataConnect shouldNotBe mutationRefImpl1.dataConnect // precondition check
-      val mutationRefImpl2 = mutationRefImpl1.copy(dataConnect = dataConnect)
+      val mutationRefImpl2 = mutationRefImpl1.withDataConnect(dataConnect)
       mutationRefImpl1.equals(mutationRefImpl2) shouldBe false
     }
   }
@@ -499,7 +498,7 @@ class MutationRefImplUnitTest {
     fun DataConnectArb.mutationRefImpl(
       dataConnect: FirebaseDataConnectInternal
     ): Arb<MutationRefImpl<TestData?, TestVariables>> =
-      mutationRefImpl().map { it.copy(dataConnect = dataConnect) }
+      mutationRefImpl().map { it.withDataConnect(dataConnect) }
 
     fun TestScope.dataConnectWithMutationResult(
       result: Result<OperationResult>,

@@ -16,6 +16,10 @@
 
 package com.google.firebase.dataconnect
 
+import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.SerializationStrategy
+import kotlinx.serialization.modules.SerializersModule
+
 /**
  * A specialization of [OperationRef] for _mutation_ operations.
  *
@@ -31,6 +35,25 @@ package com.google.firebase.dataconnect
  */
 public interface MutationRef<Data, Variables> : OperationRef<Data, Variables> {
   override suspend fun execute(): MutationResult<Data, Variables>
+
+  override fun copy(
+    operationName: String,
+    variables: Variables,
+    dataDeserializer: DeserializationStrategy<Data>,
+    variablesSerializer: SerializationStrategy<Variables>,
+    callerSdkType: FirebaseDataConnect.CallerSdkType,
+    variablesSerializersModule: SerializersModule?,
+    dataSerializersModule: SerializersModule?,
+  ): MutationRef<Data, Variables>
+
+  override fun <NewVariables> withVariables(
+    variables: NewVariables,
+    variablesSerializer: SerializationStrategy<NewVariables>,
+  ): MutationRef<Data, NewVariables>
+
+  override fun <NewData> withDataDeserializer(
+    dataDeserializer: DeserializationStrategy<NewData>,
+  ): MutationRef<NewData, Variables>
 }
 
 /**

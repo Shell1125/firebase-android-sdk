@@ -48,6 +48,69 @@ internal class QueryRefImpl<Data, Variables>(
 
   override fun subscribe(): QuerySubscription<Data, Variables> = QuerySubscriptionImpl(this)
 
+  override fun withDataConnect(
+    dataConnect: FirebaseDataConnectInternal
+  ): QueryRefImpl<Data, Variables> =
+    QueryRefImpl(
+      dataConnect = dataConnect,
+      operationName = operationName,
+      variables = variables,
+      dataDeserializer = dataDeserializer,
+      variablesSerializer = variablesSerializer,
+      callerSdkType = callerSdkType,
+      variablesSerializersModule = variablesSerializersModule,
+      dataSerializersModule = dataSerializersModule,
+    )
+
+  override fun copy(
+    operationName: String,
+    variables: Variables,
+    dataDeserializer: DeserializationStrategy<Data>,
+    variablesSerializer: SerializationStrategy<Variables>,
+    callerSdkType: FirebaseDataConnect.CallerSdkType,
+    variablesSerializersModule: SerializersModule?,
+    dataSerializersModule: SerializersModule?
+  ): QueryRefImpl<Data, Variables> =
+    QueryRefImpl(
+      dataConnect = dataConnect,
+      operationName = operationName,
+      variables = variables,
+      dataDeserializer = dataDeserializer,
+      variablesSerializer = variablesSerializer,
+      callerSdkType = callerSdkType,
+      variablesSerializersModule = variablesSerializersModule,
+      dataSerializersModule = dataSerializersModule,
+    )
+
+  override fun <NewVariables> withVariables(
+    variables: NewVariables,
+    variablesSerializer: SerializationStrategy<NewVariables>
+  ): QueryRefImpl<Data, NewVariables> =
+    QueryRefImpl(
+      dataConnect = dataConnect,
+      operationName = operationName,
+      variables = variables,
+      dataDeserializer = dataDeserializer,
+      variablesSerializer = variablesSerializer,
+      callerSdkType = callerSdkType,
+      variablesSerializersModule = variablesSerializersModule,
+      dataSerializersModule = dataSerializersModule,
+    )
+
+  override fun <NewData> withDataDeserializer(
+    dataDeserializer: DeserializationStrategy<NewData>
+  ): QueryRefImpl<NewData, Variables> =
+    QueryRefImpl(
+      dataConnect = dataConnect,
+      operationName = operationName,
+      variables = variables,
+      dataDeserializer = dataDeserializer,
+      variablesSerializer = variablesSerializer,
+      callerSdkType = callerSdkType,
+      variablesSerializersModule = variablesSerializersModule,
+      dataSerializersModule = dataSerializersModule,
+    )
+
   override fun hashCode(): Int = Objects.hash("QueryRefImpl", super.hashCode())
 
   override fun equals(other: Any?): Boolean = other is QueryRefImpl<*, *> && super.equals(other)

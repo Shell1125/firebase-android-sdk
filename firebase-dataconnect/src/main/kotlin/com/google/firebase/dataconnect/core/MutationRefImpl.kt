@@ -83,6 +83,69 @@ internal class MutationRefImpl<Data, Variables>(
       .let { MutationResultImpl(it) }
   }
 
+  override fun withDataConnect(
+    dataConnect: FirebaseDataConnectInternal
+  ): MutationRefImpl<Data, Variables> =
+    MutationRefImpl(
+      dataConnect = dataConnect,
+      operationName = operationName,
+      variables = variables,
+      dataDeserializer = dataDeserializer,
+      variablesSerializer = variablesSerializer,
+      callerSdkType = callerSdkType,
+      variablesSerializersModule = variablesSerializersModule,
+      dataSerializersModule = dataSerializersModule,
+    )
+
+  override fun copy(
+    operationName: String,
+    variables: Variables,
+    dataDeserializer: DeserializationStrategy<Data>,
+    variablesSerializer: SerializationStrategy<Variables>,
+    callerSdkType: FirebaseDataConnect.CallerSdkType,
+    variablesSerializersModule: SerializersModule?,
+    dataSerializersModule: SerializersModule?
+  ): MutationRefImpl<Data, Variables> =
+    MutationRefImpl(
+      dataConnect = dataConnect,
+      operationName = operationName,
+      variables = variables,
+      dataDeserializer = dataDeserializer,
+      variablesSerializer = variablesSerializer,
+      callerSdkType = callerSdkType,
+      variablesSerializersModule = variablesSerializersModule,
+      dataSerializersModule = dataSerializersModule,
+    )
+
+  override fun <NewVariables> withVariables(
+    variables: NewVariables,
+    variablesSerializer: SerializationStrategy<NewVariables>
+  ): MutationRefImpl<Data, NewVariables> =
+    MutationRefImpl(
+      dataConnect = dataConnect,
+      operationName = operationName,
+      variables = variables,
+      dataDeserializer = dataDeserializer,
+      variablesSerializer = variablesSerializer,
+      callerSdkType = callerSdkType,
+      variablesSerializersModule = variablesSerializersModule,
+      dataSerializersModule = dataSerializersModule,
+    )
+
+  override fun <NewData> withDataDeserializer(
+    dataDeserializer: DeserializationStrategy<NewData>
+  ): MutationRefImpl<NewData, Variables> =
+    MutationRefImpl(
+      dataConnect = dataConnect,
+      operationName = operationName,
+      variables = variables,
+      dataDeserializer = dataDeserializer,
+      variablesSerializer = variablesSerializer,
+      callerSdkType = callerSdkType,
+      variablesSerializersModule = variablesSerializersModule,
+      dataSerializersModule = dataSerializersModule,
+    )
+
   override fun hashCode(): Int = Objects.hash("MutationRefImpl", super.hashCode())
 
   override fun equals(other: Any?): Boolean = other is MutationRefImpl<*, *> && super.equals(other)

@@ -18,7 +18,6 @@ package com.google.firebase.dataconnect.core
 
 import com.google.firebase.dataconnect.FirebaseDataConnect.CallerSdkType
 import com.google.firebase.dataconnect.testutil.StubOperationRefImpl
-import com.google.firebase.dataconnect.testutil.copy
 import com.google.firebase.dataconnect.testutil.property.arbitrary.DataConnectArb
 import com.google.firebase.dataconnect.testutil.property.arbitrary.dataConnect
 import com.google.firebase.dataconnect.testutil.property.arbitrary.filterNotEqual
@@ -51,19 +50,16 @@ class OperationRefImplUnitTest {
   fun `constructor accepts non-null values`() {
     val values = Arb.dataConnect.operationRefImpl().next()
     val operationRefImpl =
-      object :
-        OperationRefImpl<TestData, TestVariables>(
-          dataConnect = values.dataConnect,
-          operationName = values.operationName,
-          variables = values.variables,
-          dataDeserializer = values.dataDeserializer,
-          variablesSerializer = values.variablesSerializer,
-          callerSdkType = values.callerSdkType,
-          variablesSerializersModule = values.variablesSerializersModule,
-          dataSerializersModule = values.dataSerializersModule,
-        ) {
-        override suspend fun execute() = TODO()
-      }
+      StubOperationRefImpl(
+        dataConnect = values.dataConnect,
+        operationName = values.operationName,
+        variables = values.variables,
+        dataDeserializer = values.dataDeserializer,
+        variablesSerializer = values.variablesSerializer,
+        callerSdkType = values.callerSdkType,
+        variablesSerializersModule = values.variablesSerializersModule,
+        dataSerializersModule = values.dataSerializersModule,
+      )
 
     operationRefImpl.asClue {
       assertSoftly {
@@ -83,19 +79,16 @@ class OperationRefImplUnitTest {
   fun `constructor accepts null values for nullable parameters`() {
     val values = Arb.dataConnect.operationRefImpl().next()
     val operationRefImpl =
-      object :
-        OperationRefImpl<TestData, TestVariables>(
-          dataConnect = values.dataConnect,
-          operationName = values.operationName,
-          variables = values.variables,
-          dataDeserializer = values.dataDeserializer,
-          variablesSerializer = values.variablesSerializer,
-          callerSdkType = values.callerSdkType,
-          variablesSerializersModule = null,
-          dataSerializersModule = null,
-        ) {
-        override suspend fun execute() = TODO()
-      }
+      StubOperationRefImpl(
+        dataConnect = values.dataConnect,
+        operationName = values.operationName,
+        variables = values.variables,
+        dataDeserializer = values.dataDeserializer,
+        variablesSerializer = values.variablesSerializer,
+        callerSdkType = values.callerSdkType,
+        variablesSerializersModule = null,
+        dataSerializersModule = null,
+      )
     operationRefImpl.asClue {
       assertSoftly {
         it.dataConnect shouldBeSameInstanceAs values.dataConnect
@@ -127,9 +120,7 @@ class OperationRefImplUnitTest {
 
   @Test
   fun `hashCode() should incorporate dataConnect`() = runTest {
-    verifyHashCodeEventuallyDiffers {
-      it.copy(dataConnect = mockk(name = Arb.dataConnect.string().next()))
-    }
+    verifyHashCodeEventuallyDiffers { it.withDataConnect(mockk()) }
   }
 
   @Test
@@ -236,8 +227,7 @@ class OperationRefImplUnitTest {
   @Test
   fun `equals() should return false when only dataConnect differs`() = runTest {
     val operationRefImpl1 = Arb.dataConnect.operationRefImpl().next()
-    val operationRefImpl2 =
-      operationRefImpl1.copy(dataConnect = mockk(Arb.dataConnect.string().next()))
+    val operationRefImpl2 = operationRefImpl1.withDataConnect(mockk())
     operationRefImpl1.equals(operationRefImpl2) shouldBe false
   }
 

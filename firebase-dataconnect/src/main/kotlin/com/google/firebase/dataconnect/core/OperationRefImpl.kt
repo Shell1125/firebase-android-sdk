@@ -34,6 +34,29 @@ internal abstract class OperationRefImpl<Data, Variables>(
 ) : OperationRef<Data, Variables> {
   abstract override suspend fun execute(): OperationResultImpl
 
+  abstract fun withDataConnect(
+    dataConnect: FirebaseDataConnectInternal
+  ): OperationRefImpl<Data, Variables>
+
+  abstract override fun copy(
+    operationName: String,
+    variables: Variables,
+    dataDeserializer: DeserializationStrategy<Data>,
+    variablesSerializer: SerializationStrategy<Variables>,
+    callerSdkType: FirebaseDataConnect.CallerSdkType,
+    variablesSerializersModule: SerializersModule?,
+    dataSerializersModule: SerializersModule?
+  ): OperationRefImpl<Data, Variables>
+
+  abstract override fun <NewVariables> withVariables(
+    variables: NewVariables,
+    variablesSerializer: SerializationStrategy<NewVariables>
+  ): OperationRefImpl<Data, NewVariables>
+
+  abstract override fun <NewData> withDataDeserializer(
+    dataDeserializer: DeserializationStrategy<NewData>
+  ): OperationRefImpl<NewData, Variables>
+
   override fun hashCode() =
     Objects.hash(
       dataConnect,

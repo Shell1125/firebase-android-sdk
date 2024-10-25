@@ -17,7 +17,6 @@
 package com.google.firebase.dataconnect.core
 
 import com.google.firebase.dataconnect.FirebaseDataConnect.CallerSdkType
-import com.google.firebase.dataconnect.core.Globals.copy
 import com.google.firebase.dataconnect.querymgr.QueryManager
 import com.google.firebase.dataconnect.testutil.property.arbitrary.DataConnectArb
 import com.google.firebase.dataconnect.testutil.property.arbitrary.dataConnect
@@ -195,7 +194,7 @@ class QueryRefImplUnitTest {
   @Test
   fun `hashCode() should incorporate dataConnect`() = runTest {
     verifyHashCodeEventuallyDiffers {
-      it.copy(dataConnect = mockk(name = Arb.dataConnect.string().next()))
+      it.withDataConnect(mockk(name = Arb.dataConnect.string().next()))
     }
   }
 
@@ -305,7 +304,7 @@ class QueryRefImplUnitTest {
       Arb.mock<FirebaseDataConnectInternal>()
     ) { queryRefImpl1, dataConnect ->
       dataConnect shouldNotBe queryRefImpl1.dataConnect // precondition check
-      val queryRefImpl2 = queryRefImpl1.copy(dataConnect = dataConnect)
+      val queryRefImpl2 = queryRefImpl1.withDataConnect(dataConnect)
       queryRefImpl1.equals(queryRefImpl2) shouldBe false
     }
   }
@@ -433,7 +432,7 @@ class QueryRefImplUnitTest {
     fun DataConnectArb.queryRefImpl(
       dataConnect: FirebaseDataConnectInternal
     ): Arb<QueryRefImpl<TestData?, TestVariables>> =
-      queryRefImpl().map { it.copy(dataConnect = dataConnect) }
+      queryRefImpl().map { it.withDataConnect(dataConnect) }
 
     fun <Data, Variables> dataConnectWithQueryResult(
       result: Result<Data>,
