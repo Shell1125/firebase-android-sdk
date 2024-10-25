@@ -42,17 +42,19 @@ public interface MutationRef<Data, Variables> : OperationRef<Data, Variables> {
     dataDeserializer: DeserializationStrategy<Data>,
     variablesSerializer: SerializationStrategy<Variables>,
     callerSdkType: FirebaseDataConnect.CallerSdkType,
-    variablesSerializersModule: SerializersModule?,
     dataSerializersModule: SerializersModule?,
+    variablesSerializersModule: SerializersModule?,
   ): MutationRef<Data, Variables>
 
   override fun <NewVariables> withVariables(
     variables: NewVariables,
     variablesSerializer: SerializationStrategy<NewVariables>,
+    variablesSerializersModule: SerializersModule?,
   ): MutationRef<Data, NewVariables>
 
   override fun <NewData> withDataDeserializer(
     dataDeserializer: DeserializationStrategy<NewData>,
+    dataSerializersModule: SerializersModule?,
   ): MutationRef<NewData, Variables>
 }
 

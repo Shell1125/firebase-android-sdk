@@ -29,8 +29,8 @@ internal abstract class OperationRefImpl<Data, Variables>(
   override val dataDeserializer: DeserializationStrategy<Data>,
   override val variablesSerializer: SerializationStrategy<Variables>,
   override val callerSdkType: FirebaseDataConnect.CallerSdkType,
-  override val variablesSerializersModule: SerializersModule?,
   override val dataSerializersModule: SerializersModule?,
+  override val variablesSerializersModule: SerializersModule?,
 ) : OperationRef<Data, Variables> {
   abstract override suspend fun execute(): OperationResultImpl
 
@@ -44,17 +44,19 @@ internal abstract class OperationRefImpl<Data, Variables>(
     dataDeserializer: DeserializationStrategy<Data>,
     variablesSerializer: SerializationStrategy<Variables>,
     callerSdkType: FirebaseDataConnect.CallerSdkType,
+    dataSerializersModule: SerializersModule?,
     variablesSerializersModule: SerializersModule?,
-    dataSerializersModule: SerializersModule?
   ): OperationRefImpl<Data, Variables>
 
   abstract override fun <NewVariables> withVariables(
     variables: NewVariables,
-    variablesSerializer: SerializationStrategy<NewVariables>
+    variablesSerializer: SerializationStrategy<NewVariables>,
+    variablesSerializersModule: SerializersModule?,
   ): OperationRefImpl<Data, NewVariables>
 
   abstract override fun <NewData> withDataDeserializer(
-    dataDeserializer: DeserializationStrategy<NewData>
+    dataDeserializer: DeserializationStrategy<NewData>,
+    dataSerializersModule: SerializersModule?,
   ): OperationRefImpl<NewData, Variables>
 
   override fun hashCode() =
@@ -65,8 +67,8 @@ internal abstract class OperationRefImpl<Data, Variables>(
       dataDeserializer,
       variablesSerializer,
       callerSdkType,
+      dataSerializersModule,
       variablesSerializersModule,
-      dataSerializersModule
     )
 
   override fun equals(other: Any?) =
@@ -77,8 +79,8 @@ internal abstract class OperationRefImpl<Data, Variables>(
       other.dataDeserializer == dataDeserializer &&
       other.variablesSerializer == variablesSerializer &&
       other.callerSdkType == callerSdkType &&
-      other.variablesSerializersModule == variablesSerializersModule &&
-      other.dataSerializersModule == dataSerializersModule
+      other.dataSerializersModule == dataSerializersModule &&
+      other.variablesSerializersModule == variablesSerializersModule
 
   override fun toString() =
     "OperationRefImpl(" +
@@ -88,8 +90,8 @@ internal abstract class OperationRefImpl<Data, Variables>(
       "dataDeserializer=$dataDeserializer, " +
       "variablesSerializer=$variablesSerializer" +
       "callerSdkType=$callerSdkType, " +
-      "variablesSerializersModule=$variablesSerializersModule, " +
-      "dataSerializersModule=$dataSerializersModule" +
+      "dataSerializersModule=$dataSerializersModule, " +
+      "variablesSerializersModule=$variablesSerializersModule" +
       ")"
 
   abstract inner class OperationResultImpl(override val data: Data) :

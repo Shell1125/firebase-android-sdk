@@ -29,8 +29,8 @@ internal class QueryRefImpl<Data, Variables>(
   dataDeserializer: DeserializationStrategy<Data>,
   variablesSerializer: SerializationStrategy<Variables>,
   callerSdkType: FirebaseDataConnect.CallerSdkType,
-  variablesSerializersModule: SerializersModule?,
   dataSerializersModule: SerializersModule?,
+  variablesSerializersModule: SerializersModule?,
 ) :
   QueryRef<Data, Variables>,
   OperationRefImpl<Data, Variables>(
@@ -40,8 +40,8 @@ internal class QueryRefImpl<Data, Variables>(
     dataDeserializer = dataDeserializer,
     variablesSerializer = variablesSerializer,
     callerSdkType = callerSdkType,
-    variablesSerializersModule = variablesSerializersModule,
     dataSerializersModule = dataSerializersModule,
+    variablesSerializersModule = variablesSerializersModule,
   ) {
   override suspend fun execute(): QueryResultImpl =
     dataConnect.lazyQueryManager.get().execute(this).let { QueryResultImpl(it.ref.getOrThrow()) }
@@ -58,8 +58,8 @@ internal class QueryRefImpl<Data, Variables>(
       dataDeserializer = dataDeserializer,
       variablesSerializer = variablesSerializer,
       callerSdkType = callerSdkType,
-      variablesSerializersModule = variablesSerializersModule,
       dataSerializersModule = dataSerializersModule,
+      variablesSerializersModule = variablesSerializersModule,
     )
 
   override fun copy(
@@ -68,8 +68,8 @@ internal class QueryRefImpl<Data, Variables>(
     dataDeserializer: DeserializationStrategy<Data>,
     variablesSerializer: SerializationStrategy<Variables>,
     callerSdkType: FirebaseDataConnect.CallerSdkType,
+    dataSerializersModule: SerializersModule?,
     variablesSerializersModule: SerializersModule?,
-    dataSerializersModule: SerializersModule?
   ): QueryRefImpl<Data, Variables> =
     QueryRefImpl(
       dataConnect = dataConnect,
@@ -78,13 +78,14 @@ internal class QueryRefImpl<Data, Variables>(
       dataDeserializer = dataDeserializer,
       variablesSerializer = variablesSerializer,
       callerSdkType = callerSdkType,
-      variablesSerializersModule = variablesSerializersModule,
       dataSerializersModule = dataSerializersModule,
+      variablesSerializersModule = variablesSerializersModule,
     )
 
   override fun <NewVariables> withVariables(
     variables: NewVariables,
-    variablesSerializer: SerializationStrategy<NewVariables>
+    variablesSerializer: SerializationStrategy<NewVariables>,
+    variablesSerializersModule: SerializersModule?,
   ): QueryRefImpl<Data, NewVariables> =
     QueryRefImpl(
       dataConnect = dataConnect,
@@ -93,12 +94,13 @@ internal class QueryRefImpl<Data, Variables>(
       dataDeserializer = dataDeserializer,
       variablesSerializer = variablesSerializer,
       callerSdkType = callerSdkType,
-      variablesSerializersModule = variablesSerializersModule,
       dataSerializersModule = dataSerializersModule,
+      variablesSerializersModule = variablesSerializersModule,
     )
 
   override fun <NewData> withDataDeserializer(
-    dataDeserializer: DeserializationStrategy<NewData>
+    dataDeserializer: DeserializationStrategy<NewData>,
+    dataSerializersModule: SerializersModule?,
   ): QueryRefImpl<NewData, Variables> =
     QueryRefImpl(
       dataConnect = dataConnect,
@@ -107,8 +109,8 @@ internal class QueryRefImpl<Data, Variables>(
       dataDeserializer = dataDeserializer,
       variablesSerializer = variablesSerializer,
       callerSdkType = callerSdkType,
-      variablesSerializersModule = variablesSerializersModule,
       dataSerializersModule = dataSerializersModule,
+      variablesSerializersModule = variablesSerializersModule,
     )
 
   override fun hashCode(): Int = Objects.hash("QueryRefImpl", super.hashCode())
@@ -123,8 +125,8 @@ internal class QueryRefImpl<Data, Variables>(
       "dataDeserializer=$dataDeserializer, " +
       "variablesSerializer=$variablesSerializer, " +
       "callerSdkType=$callerSdkType, " +
-      "variablesSerializersModule=$variablesSerializersModule, " +
-      "dataSerializersModule=$dataSerializersModule" +
+      "dataSerializersModule=$dataSerializersModule, " +
+      "variablesSerializersModule=$variablesSerializersModule" +
       ")"
 
   inner class QueryResultImpl(data: Data) :

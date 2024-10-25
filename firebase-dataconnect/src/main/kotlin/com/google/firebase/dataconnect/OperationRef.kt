@@ -151,16 +151,16 @@ public interface OperationRef<Data, Variables> {
   public val callerSdkType: FirebaseDataConnect.CallerSdkType
 
   /**
-   * A [SerializersModule] to use when encoding the variables using [variablesSerializer]. May be
-   * `null`, to not use a [SerializersModule].
-   */
-  public val variablesSerializersModule: SerializersModule?
-
-  /**
    * A [SerializersModule] to use when decoding the response data using [dataDeserializer]. May be
    * `null`, to not use a [SerializersModule].
    */
   public val dataSerializersModule: SerializersModule?
+
+  /**
+   * A [SerializersModule] to use when encoding the variables using [variablesSerializer]. May be
+   * `null`, to not use a [SerializersModule].
+   */
+  public val variablesSerializersModule: SerializersModule?
 
   /**
    * Executes this operation and returns the result.
@@ -190,8 +190,8 @@ public interface OperationRef<Data, Variables> {
     dataDeserializer: DeserializationStrategy<Data> = this.dataDeserializer,
     variablesSerializer: SerializationStrategy<Variables> = this.variablesSerializer,
     callerSdkType: FirebaseDataConnect.CallerSdkType = this.callerSdkType,
-    variablesSerializersModule: SerializersModule? = this.variablesSerializersModule,
     dataSerializersModule: SerializersModule? = this.dataSerializersModule,
+    variablesSerializersModule: SerializersModule? = this.variablesSerializersModule,
   ): OperationRef<Data, Variables>
 
   /**
@@ -208,6 +208,7 @@ public interface OperationRef<Data, Variables> {
   public fun <NewVariables> withVariables(
     variables: NewVariables,
     variablesSerializer: SerializationStrategy<NewVariables>,
+    variablesSerializersModule: SerializersModule? = this.variablesSerializersModule,
   ): OperationRef<Data, NewVariables>
 
   /**
@@ -222,6 +223,7 @@ public interface OperationRef<Data, Variables> {
    */
   public fun <NewData> withDataDeserializer(
     dataDeserializer: DeserializationStrategy<NewData>,
+    dataSerializersModule: SerializersModule? = this.dataSerializersModule,
   ): OperationRef<NewData, Variables>
 
   /**
