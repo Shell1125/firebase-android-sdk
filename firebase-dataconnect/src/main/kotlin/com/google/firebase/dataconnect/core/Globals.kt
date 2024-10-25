@@ -129,4 +129,35 @@ internal object Globals {
       variablesSerializersModule = variablesSerializersModule,
       dataSerializersModule = dataSerializersModule,
     )
+
+  fun <Data, NewVariables> QueryRefImpl<Data, *>.withVariablesSerializer(
+    variables: NewVariables,
+    variablesSerializer: SerializationStrategy<NewVariables>,
+    variablesSerializersModule: SerializersModule? = this.variablesSerializersModule,
+  ): QueryRefImpl<Data, NewVariables> =
+    QueryRefImpl(
+      dataConnect = dataConnect,
+      operationName = operationName,
+      variables = variables,
+      dataDeserializer = dataDeserializer,
+      variablesSerializer = variablesSerializer,
+      callerSdkType = callerSdkType,
+      variablesSerializersModule = variablesSerializersModule,
+      dataSerializersModule = dataSerializersModule,
+    )
+
+  fun <NewData, Variables> QueryRefImpl<*, Variables>.withDataDeserializer(
+    dataDeserializer: DeserializationStrategy<NewData>,
+    dataSerializersModule: SerializersModule? = this.dataSerializersModule,
+  ): QueryRefImpl<NewData, Variables> =
+    QueryRefImpl(
+      dataConnect = dataConnect,
+      operationName = operationName,
+      variables = variables,
+      dataDeserializer = dataDeserializer,
+      variablesSerializer = variablesSerializer,
+      callerSdkType = callerSdkType,
+      variablesSerializersModule = variablesSerializersModule,
+      dataSerializersModule = dataSerializersModule,
+    )
 }

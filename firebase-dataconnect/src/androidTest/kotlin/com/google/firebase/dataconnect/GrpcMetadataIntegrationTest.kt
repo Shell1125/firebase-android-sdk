@@ -17,7 +17,6 @@
 package com.google.firebase.dataconnect
 
 import android.os.Build
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.appcheck.AppCheckProvider
 import com.google.firebase.appcheck.AppCheckProviderFactory
@@ -57,9 +56,7 @@ import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.serializer
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
 class GrpcMetadataIntegrationTest : DataConnectIntegrationTestBase() {
 
   @get:Rule val inProcessDataConnectGrpcServer = InProcessDataConnectGrpcServer()
@@ -284,7 +281,7 @@ class GrpcMetadataIntegrationTest : DataConnectIntegrationTestBase() {
     expectedValue: String? = null
   ) {
     val metadata = withClue("waiting for metadata to be reported") { job.await() }
-    metadata.asClue {
+    withClue("key=$key, metadata=$metadata") {
       val actualValue = metadata.get(key)
       if (expectedValue === null) {
         actualValue.shouldNotBeNull()

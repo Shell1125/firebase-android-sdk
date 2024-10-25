@@ -62,6 +62,7 @@ dependencies {
   implementation(libs.mockk)
   implementation(libs.protobuf.java.lite)
   implementation(libs.robolectric)
+  implementation(libs.three.ten.abp)
   implementation(libs.truth)
 }
 
